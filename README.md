@@ -10,6 +10,6 @@ Homework3: Implementing a DNS server using Java RMI (Java)
 
 Homework4: Implementing a DNS server using ZooKeeper API (Java)
 
-Homework5:
+Homework5: Distributed Control of Currency Exchange Value (Java)
 
 Course Project:
