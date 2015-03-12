@@ -16,7 +16,7 @@ public class Lamport {
     public static void main(String args[]) throws IOException {
         //parsing args
         int processID = Integer.parseInt(args[0]);
-        int processNum = Integer.parseInt(args[1]);
+        int operation_num = Integer.parseInt(args[1]);
         int clockRate = Integer.parseInt(args[2]);
         
         //init currency, initial value is (100,100)
