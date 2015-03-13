@@ -10,7 +10,8 @@ import java.net.Socket;
 
 
 
-/** dispatcher thread that recv msg and multicast ack 
+/** dispatcher thread that recv update msg, multicast ack
+*   and forward acked update to application 
 *   @author yuemin
 */
 
