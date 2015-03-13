@@ -1,5 +1,5 @@
 
-/** payload object to send/recv in communication 
+/** update(terminate)/ack message to send/recv in communication 
 *   @author yuemin
 */
 public class Msg implements Comparable<Msg>{
