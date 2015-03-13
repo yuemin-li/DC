@@ -5,7 +5,7 @@ import java.util.Random;
 import java.net.Socket;
 
 
-/** worker thread, sending update and ack msg to processes 
+/** worker thread, generate rate changes, sending update(terminate) msg to processes 
 *   @author yuemin
 */
 public class Worker implements Runnable{
