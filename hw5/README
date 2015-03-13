@@ -1,4 +1,4 @@
-This the fifth homework in distributed computing class.The distributed control of currency exchange value is implemented by the totally-ordered multicast using Lamport’s logical clocks.
+This the fifth homework about multi-thread concurrency in distributed computing class.The distributed control of currency exchange value is implemented by the totally-ordered multicast using Lamport’s logical clocks.
 
 There are seven classed defined in all.
 Clock.java: a logical clock for each process.
