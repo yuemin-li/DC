@@ -1,6 +1,8 @@
 
 
-/* object storing currency buy rate and sell rate */
+/** object storing currency buy rate and sell rate 
+*   @author yuemin
+*/
 
 public class Currency{
 

@@ -1,6 +1,8 @@
 
 
-/* thread: local logical clock */
+/** thread: local logical clock 
+*   @author yuemin
+*/
 
 public class LocalClock implements Runnable {
     public Clock localClock;

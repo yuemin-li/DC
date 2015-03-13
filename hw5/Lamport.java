@@ -11,7 +11,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-/* entry of the program */
+/** entry of the program 
+*   @author yuemin
+*/
 public class Lamport {
     public static void main(String args[]) throws IOException {
         //parsing args
@@ -127,14 +129,28 @@ public class Lamport {
             }
  
         }
-                
+    
+        //start dispatcher thread
+        Dispatcher dis = new Dispatcher();
+        dis.processID = processID;
+        dis.currency = currency;
+        dis.dis_clock = clock;
+        dis.clients = socket_c;
+        Thread dis_thread = new Thread(dis);
+        dis_thread.start();
 
-
-
+        //start worker thread
+        Worker worker = new Worker();
+        worker.clients = socket_c;
+        worker.processID = processID;
+        worker.operation_num = operation_num;
+        worker.workerClock = clock;
+        Thread worker_thread = new Thread(worker);
+        worker_thread.start();
  
     }
 
-    private static String realTime(){
+    public static String realTime(){
         Calendar c = Calendar.getInstance();
         //[month/date hour:minute:second]
         String realTime = "["+c.get(Calendar.MONTH)+"/"+c.get(Calendar.DATE)+" "

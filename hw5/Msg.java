@@ -1,8 +1,10 @@
 
-/* payload object to send/recv in communication */
+/** payload object to send/recv in communication 
+*   @author yuemin
+*/
 public class Msg implements Comparable<Msg>{
 
-    public String ID;
+    public String msgId;
     public int type;
     public int processID;
     public int deltaBuy;
@@ -12,18 +14,19 @@ public class Msg implements Comparable<Msg>{
     
     //construct the msg payload
     public String sendingMsg(){
-        String sending_msg = String.valueOf(this.type) + "/" + String.valueOf(this.processID) + "/" + ID +
-                            String.valueOf(this.deltaBuy) + "/" + String.valueOf(this.deltaSell) + "/" + 
-                            String.valueOf(timestamp) + "/" + String.valueOf(ack_num);
+        String sending_msg = String.valueOf(this.type) + "//" + String.valueOf(this.processID) + "//" + msgId +
+                            "//" + String.valueOf(this.deltaBuy) + "//" + String.valueOf(this.deltaSell) + "//" + 
+                            String.valueOf(timestamp) + "//" + String.valueOf(ack_num);
         return sending_msg;
     } 
 
     //parsing the msg payload
     public void parsingMsg(String msg){
-        String[] parsingMsg = msg.split("/");
+        //System.out.println(msg);
+        String[] parsingMsg = msg.split("//");
         this.type = Integer.parseInt(parsingMsg[0]);
         this.processID = Integer.parseInt(parsingMsg[1]);
-        this.ID = parsingMsg[2];
+        this.msgId = parsingMsg[2];
         this.deltaBuy = Integer.parseInt(parsingMsg[3]);
         this.deltaSell = Integer.parseInt(parsingMsg[4]);
         this.timestamp = Double.parseDouble(parsingMsg[5]);

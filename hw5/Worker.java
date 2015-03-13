@@ -1,11 +1,13 @@
-
+import java.io.IOException;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.net.Socket;
 
 
-/* worker thread, sending update and ack msg to processes */
+/** worker thread, sending update and ack msg to processes 
+*   @author yuemin
+*/
 public class Worker implements Runnable{
     
     public ArrayList<Socket> clients;
@@ -18,9 +20,13 @@ public class Worker implements Runnable{
         //every client has its own output stream to store outgoing msg.
         ArrayList<DataOutputStream> out_streams = new ArrayList<DataOutputStream>();
         for(int i=0; i<clients.size(); i++){
-            Socket client = clients.get(i);
-            DataOutputStream out_stream = new DataOutputStream(client.getOutputStream());
-            out_streams.add(out_stream); 
+            try{
+                Socket client = clients.get(i);
+                DataOutputStream out_stream = new DataOutputStream(client.getOutputStream());
+                out_streams.add(out_stream);
+            } catch (IOException e){
+                e.printStackTrace();
+            } 
         }
         
         //proceed with operations
@@ -35,11 +41,11 @@ public class Worker implements Runnable{
             if (j==operation_num){//ending msg
                 type = 0;
             }
-            String ID = processID + "-" + j;
+            String msgId = processID + "-" + j;
             workerClock.increaseStamp();//Lamport requirement
         
             Msg msg = new Msg();
-            msg.ID = ID;
+            msg.msgId = msgId;
             msg.type = type;
             msg.processID = processID;
             msg.deltaBuy = deltaBuy;
@@ -54,13 +60,16 @@ public class Worker implements Runnable{
             
             //write to outputStreams 
             for (int k=0; k<out_streams.size(); k++){
-                String msg_str = msg.sendingMsg();
-                Socket client = clients.get(k);
-                out_streams.get(k).writeUTF(msg_str);//write string instead of write bytes
+                try{
+                    String msg_str = msg.sendingMsg();
+                    Socket client = clients.get(k);
+                    out_streams.get(k).writeUTF(msg_str);//write string instead of write bytes
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
             }
 
         }
-        
         
 
     }

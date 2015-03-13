@@ -1,5 +1,7 @@
 
-/* logical clock in each process */
+/** logical clock in each process 
+*   @author yuemin
+*/
 
 public class Clock{
     public int clockRate;
