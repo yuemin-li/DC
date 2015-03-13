@@ -1,6 +1,6 @@
 
 
-/** thread: local logical clock 
+/** thread: local logical clock ticks at a specific clock rate
 *   @author yuemin
 */
 
