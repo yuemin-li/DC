@@ -11,7 +11,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-/** entry of the program 
+/** entry of the program
+*   parse processID, num of operations and clock rate for each process from command line
 *   @author yuemin
 */
 public class Lamport {
