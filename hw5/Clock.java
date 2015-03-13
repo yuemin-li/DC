@@ -1,5 +1,5 @@
 
-/** logical clock in each process 
+/** one logical clock for each process 
 *   @author yuemin
 */
 
