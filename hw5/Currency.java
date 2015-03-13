@@ -1,6 +1,6 @@
 
 
-/** object storing currency buy rate and sell rate 
+/** currency object storing currency sell rate and buy rate in pair 
 *   @author yuemin
 */
 
