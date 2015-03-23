@@ -12,4 +12,6 @@ Homework4: Implementing a DNS server using ZooKeeper API (Java)
 
 Homework5: Distributed Control of Currency Exchange Value (Java)
 
-Course Project:
+Homework6: Distributed Control of Currency Exchange Value Using ZooKeeper API (Java)
+
+Course Project: A Simplified Map-Reduce Computing Framework
