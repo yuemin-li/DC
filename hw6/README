@@ -6,3 +6,12 @@ Homework6: Distributed control of currency exchange value using ZooKeeper API
 3. a log file will be created for each process
 
 This is intended for three process running concurrently as it is the homework requirement. But one can allways change the end_counter condtion check in Dispatcher.java file in order to run more processes concurrently.
+
+Worker: create new znode to store new delta values, the name of each delta value is constructed as "update"+"the num of children under root now", so that every process can go into the sending update procedure at any time. The last created znode for each process stores a "update end" value.
+
+Dispathcer: allways reading from znondes under root, one by one, untill it finds three "update end" message.
+
+TotalOrderZK: entrance of the process, having two threads running cocurrently as worker and dispatcher. creating a zookeeper clinet instance for this process, and also referenced by two threads.
+
+Other classes are the same funtionality as previous Lamport homework.
+
