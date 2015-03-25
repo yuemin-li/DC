@@ -1,4 +1,8 @@
-
+import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
 
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.CreateMode;
@@ -10,26 +14,12 @@ import org.apache.zookeeper.ZooDefs.Ids;
 public class TotalOrderZK {
 
     private static final int SESSION_TIMEOUT = 10000;
-    public ZooKeeper zk;
+    public static ZooKeeper zk;
     public Worker w;
     public Dispatcher dp;
-    public Barrier b;
     public Watcher wh = new Watcher() {
         public void process (WatchedEvent event) {
-            switch (event.getType()){
-                case NodeChildrenChanged:
-                case NodeCreated:
-                case NodeDataChanged:
-                    if(b.enter()){
-                        dp.pull();
-                    }
-                    b.leave();
-                    break;
-                case NodeDeleted:
-                case None:
-                    log.info("Got unexpected zookeeper event: " + event.getType());
-                    break;
-            }
+            // do nothing
         }
     };
     
@@ -55,18 +45,27 @@ public class TotalOrderZK {
             System.out.println("Got an exception:" + e.getMessage());
         }
     }
+    
+    public static String realTime(){
+        Calendar c = Calendar.getInstance();
+        //[month/date hour:minute:second]
+        String realTime = "["+c.get(Calendar.MONTH)+"/"+c.get(Calendar.DATE)+" "
+                            +c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+":"+c.get(Calendar.SECOND)+"]";
+        return realTime;
+    }
+
 
     
     public static void main(String args[]) throws IOException {
         //parsing args
-        int processID = Integer.parseInt(args[0]);
+        String processID = args[0];
         int operation_num = Integer.parseInt(args[1]);
         int clockRate = Integer.parseInt(args[2]);
-        int zkServer_ip = Integer.parseInt(args[3]);
-        int zkServer_port = Integer.parseInt(args[4]);
+        String zkServer_ip = args[3];
+        String zkServer_port = args[4];
 
         String address = zkServer_ip + ":" + zkServer_port;
-        String root = "totalOrder";   
+        String root = "/totalOrder";   
         
         //init currency, initial value is (100,100)
         Currency currency = new Currency();
@@ -83,42 +82,55 @@ public class TotalOrderZK {
         Thread lcthread = new Thread(lc);
         lcthread.start();
 
-     
-        Queue pcQ = new Queue();
-        Barrier barrier = new Barrier();
+        //ceate log file
+        File log = new File("log"+processID+".txt");
+        OutputStream output = new FileOutputStream (log, true);// append to file end
+
 
         TotalOrderZK to = new TotalOrderZK();
-        to.createZKInstance(address); 
-        to.b = b;
+        to.createZKInstance(address);
+        String connected = "P"+processID+" is connected to ZooKeeper(" + address +").";
+        output.write(connected.getBytes());
+        System.out.println(connected);
+        try { 
+            if(to.zk.exists(root,false)==null){
+                to.zk.create(root, new byte[0], Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
+                System.out.println("create /root");
+            }
+        }catch(KeeperException e){
+                e.printStackTrace();
+        }catch(InterruptedException e){
+                e.printStackTrace();
+        }
+        
+        //to.b = barrier;
 
         Worker worker = new Worker();
+        //worker.address = address;
         worker.zk = to.zk;
         worker.root = root;
         worker.operation_num = operation_num;
-        worker.worker_clock = clock;
-
-        to.w = worker;
+        worker.workerClock = clock;
+        worker.processID = processID;
 
         Dispatcher dis = new Dispatcher();
         dis.processID = processID;
         dis.currency = currency;
         dis.dis_clock = clock;
-        dis.zk = zk;
+        dis.zk = to.zk;
         dis.root = root;
-        dis.pcQ = pcQ;
-        dis.b = barrier;
-        dis.wh = to.wh;
 
-        to.dp = dis;
 
         Thread worker_thread = new Thread(worker);
         worker_thread.start();
-        Thread dp_thread = new Thread(dp);
+        System.out.println("worker start");
+        Thread dp_thread = new Thread(dis);
         dp_thread.start();
+        System.out.println("dispatcher start");
+        
 
         
-        to.closeZKInstance();
+        //to.closeZKInstance();
     }
-
 }
 
