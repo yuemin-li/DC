@@ -89,7 +89,7 @@ public class TotalOrderZK {
 
         TotalOrderZK to = new TotalOrderZK();
         to.createZKInstance(address);
-        String connected = "P"+processID+" is connected to ZooKeeper(" + address +").";
+        String connected = "P"+processID+" is connected to ZooKeeper(" + address +").\n";
         output.write(connected.getBytes());
         System.out.println(connected);
         try { 
