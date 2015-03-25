@@ -115,7 +115,7 @@ public class Dispatcher implements Runnable {
                     /* processing the update msg */
                     //open log
                     File update_log = new File("log"+processID+".txt");
-                    FileOutputStream update_output = new FileOutputStream(update_log, true);
+                    FileOutputStream output = new FileOutputStream(update_log, true);
 
                     while (!msgQ.isEmpty() && msgQ.get(0).ack_num == clients.size()){
                         if(msgQ.get(0).type == 1){
