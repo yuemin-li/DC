@@ -64,7 +64,7 @@ public class Dispatcher implements Runnable {
                     output.write(log_update.getBytes());
                     System.out.println(log_update);
                 }
-                if(end_counter == 2){//the num of end msg
+                if(end_counter == 3){//the num of end msg
                     String log_end = "All finished. P" + processID +" is terminating...\n";
                     output.write(log_end.getBytes());
                     System.out.println(log_end);
